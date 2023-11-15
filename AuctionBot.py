@@ -80,7 +80,7 @@ def greetings(telegram_id, *args):
     rules = InlineKeyboardButton("Правила", callback_data=json.dumps(['/start', "rules"]))
     help_info = InlineKeyboardButton("Помощь", callback_data=json.dumps(['/start', "help_info"]))
 
-    # buttons for administrators
+    # buttons for administrators only
 
     # if telegram_id in administrators_dict.keys():
 
