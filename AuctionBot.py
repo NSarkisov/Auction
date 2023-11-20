@@ -828,9 +828,9 @@ def run_scheduler():
 
 
 print("Started")
-schedule.every().day.at('13:58').do(send_lot, "notification")
-schedule.every().day.at('13:58').do(send_lot, "approvement")
-# update(case="Обновить администраторов")
+schedule.every().day.at('17:49').do(send_lot, "notification")
+schedule.every().day.at('17:49').do(send_lot, "approvement")
+update(case="Обновить администраторов")
 if __name__ == '__main__':
     scheduler_thread = threading.Thread(target=run_scheduler)
     scheduler_thread.start()
