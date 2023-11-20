@@ -828,8 +828,8 @@ def run_scheduler():
 
 
 print("Started")
-schedule.every().day.at('17:49').do(send_lot, "notification")
-schedule.every().day.at('17:49').do(send_lot, "approvement")
+schedule.every().day.at('18:10').do(send_lot, "notification")
+schedule.every().day.at('18:10').do(send_lot, "approvement")
 update(case="Обновить администраторов")
 if __name__ == '__main__':
     scheduler_thread = threading.Thread(target=run_scheduler)
