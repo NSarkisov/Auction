@@ -26,6 +26,69 @@ class Starting:
         self.keyboard.add(create_lot, recreate_lot, customers, show_history, show_finance, deleting_lot, row_width=1)
         return self
 
+    def super_admin(self):
+        create_lot = InlineKeyboardButton("Создать лот", callback_data=json.dumps(['/start', "create_lot"]))
+        recreate_lot = InlineKeyboardButton("Повторное создание лота",
+                                            callback_data=json.dumps(['/start', "recreate_lot"]))
+        customers = InlineKeyboardButton("Покупатели", callback_data=json.dumps(['/start', "customers"]))
+        show_history = InlineKeyboardButton("История торгов", callback_data=json.dumps(['/start', "show_history"]))
+        show_finance = InlineKeyboardButton("Финансы", callback_data=json.dumps(['/start', "show_finance"]))
+        deleting_lot = InlineKeyboardButton("Удаление лота из текущего аукциона",
+                                            callback_data=json.dumps(['/start', "deleting_lot"]))
+        admins_settings = InlineKeyboardButton("Настройка администраторов",
+                                               callback_data=json.dumps(['/start', "admins_settings"]))
+        self.keyboard.add(create_lot, recreate_lot, customers,
+                          show_history, show_finance, deleting_lot, admins_settings, row_width=1)
+        return self
+
+
+class SuperAdmin:
+
+    def __init__(self):
+        self.keyboard = InlineKeyboardMarkup()
+
+    def options(self):
+        add = InlineKeyboardButton("Добавить администратора", callback_data=json.dumps(['/SuperAdmin', "add_admin"]))
+        change = InlineKeyboardButton("Изменить администратора", callback_data=json.dumps(['/SuperAdmin', "change_admin"]))
+        delete = InlineKeyboardButton("Удалить администратора", callback_data=json.dumps(['/SuperAdmin', "delete_admin"]))
+        home = InlineKeyboardButton("Главное меню", callback_data=json.dumps(["/home", "menu"]))
+        self.keyboard.add(add, change, delete, home, row_width=1)
+        return self
+
+    def add(self):
+        telegram_link = InlineKeyboardButton("Найти пользователя по ссылке",
+                                             callback_data=json.dumps(['/admin_add', "telegram_link"]))
+        back = InlineKeyboardButton("Назад", callback_data=json.dumps(['/start', "admins_settings"]))
+        self.keyboard.add(telegram_link, back, row_width=1)
+        return self
+
+    def changes(self, admins):
+        for admin_id, users_link in admins:
+            admin = InlineKeyboardButton(users_link, callback_data=json.dumps(['/admin_changes', admin_id]))
+            self.keyboard.add(admin, row_width=1)
+
+        back = InlineKeyboardButton("Назад", callback_data=json.dumps(['/start', "admins_settings"]))
+        self.keyboard.add(back,row_width=1)
+        return self
+
+    def changes_in_admin(self, admin_id):
+        status = InlineKeyboardButton("Изменить статус", callback_data=json.dumps(['/change_status', admin_id]))
+        balance = InlineKeyboardButton("Изменить баланс", callback_data=json.dumps(['/change_balance', admin_id]))
+        back = InlineKeyboardButton("Назад", callback_data=json.dumps(['/SuperAdmin', "change_admin"]))
+        self.keyboard.add(status, balance, back, row_width=1)
+        return self
+
+    def delete(self, admins):
+        for admin_id, users_link in admins:
+            admin = InlineKeyboardButton(users_link, callback_data=json.dumps(['/admin_delete', admin_id]))
+            self.keyboard.add(admin, row_width=1)
+
+        back = InlineKeyboardButton("Назад", callback_data=json.dumps(['/start', "admins_settings"]))
+        self.keyboard.add(back, row_width=1)
+        return self
+
+
+
 
 class MainMenu:
 
@@ -120,7 +183,16 @@ class TradingHistory:
         for lot_info in self.info:
             lot_id, lot_title = lot_info[0], lot_info[1]
             title = InlineKeyboardButton(lot_title, callback_data=json.dumps(['/history', lot_id]))
-            self.keyboard.add(title)
+            self.keyboard.add(title, row_width=1)
+        main_menu = InlineKeyboardButton("Главное меню", callback_data=json.dumps(["/home", "menu"]))
+        self.keyboard.add(main_menu)
+        return self
+
+    def user_participated_lots(self):
+        for lot_info in self.info:
+            lot_id, lot_title = lot_info[0], lot_info[1]
+            title = InlineKeyboardButton(lot_title, url=f"https://t.me/NScourse_bot?start={lot_id}")
+            self.keyboard.add(title, row_width=1)
         main_menu = InlineKeyboardButton("Главное меню", callback_data=json.dumps(["/home", "menu"]))
         self.keyboard.add(main_menu)
         return self
@@ -141,6 +213,15 @@ class TradingHistory:
             self.keyboard.add(title)
         back = InlineKeyboardButton("Назад", callback_data=json.dumps(['/start', "recreate_lot"]))
         self.keyboard.add(back)
+        return self
+
+    def delete_lot(self):
+        for lot_info in self.info:
+            lot_id, lot_title = lot_info[0], lot_info[1]
+            title = InlineKeyboardButton(lot_title, callback_data=json.dumps(['/delete', lot_id]))
+            self.keyboard.add(title)
+        home = InlineKeyboardButton("Главное меню", callback_data=json.dumps(["/home", "menu"]))
+        self.keyboard.add(home)
         return self
 
     def won_lot(self):
